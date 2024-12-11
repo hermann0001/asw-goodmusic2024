@@ -47,18 +47,17 @@ public class RecensioniSeguiteServiceRestBasedImpl implements RecensioniSeguiteS
 		}
 
 		/* ok, ma purtroppo chiama il metodo getRecensioniByGeneri che non è definito né implementato */ 
-//		Collection<String> generiSeguiti = 
-//			connessioni
-//				.stream()
-//				.filter(c -> c.getRuolo().equals("GENERE"))
-//				.map(c -> c.getSeguito())
-//				.collect(Collectors.toSet()); 
-//		if (generiSeguiti.size()>0) {
-//			Collection<RecensioneBreve> recensioniDiGeneri = recensioniClient.getRecensioniByGeneri(generiSeguiti);
-//			recensioniSeguite.addAll(recensioniDiGeneri); 
-//		}
+		Collection<String> generiSeguiti = 
+			connessioni
+				.stream()
+				.filter(c -> c.getRuolo().equals("GENERE"))
+				.map(c -> c.getSeguito())
+				.collect(Collectors.toSet()); 
+		if (generiSeguiti.size()>0) {
+			Collection<RecensioneBreve> recensioniDiGeneri = recensioniClient.getRecensioniByGeneri(generiSeguiti);
+			recensioniSeguite.addAll(recensioniDiGeneri); 
+		}
 
 		return recensioniSeguite; 
 	}
-
 }
