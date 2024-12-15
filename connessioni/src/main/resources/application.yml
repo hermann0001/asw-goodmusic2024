@@ -1,6 +1,7 @@
 # application.yml
 --- 
 spring: 
+  
   application: 
     name: connessioni
   cloud:
@@ -18,6 +19,20 @@ spring:
         queryPassing: true 
     loadbalancer: 
       ribbon.enabled: false 
+
+  #database postgres
+  datasource:
+    url: jdbc:postgresql://localhost:5433/connessioni_db?user=connessioni_user&password=connessioni_pass
+    username: connessioni_user
+    password: connessioni_pass
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true  # Abilitato per vedere nel log le query SQL eseguite durante il runtime
+    properties:
+      hibernate:
+      format_sql: true #Formattazione leggibile nel log
 
 server: 
   port: ${PORT:${SERVER_PORT:0}}

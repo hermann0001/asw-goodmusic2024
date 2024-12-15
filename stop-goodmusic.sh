@@ -11,3 +11,9 @@ sleep 4
 
 docker stop asw-consul 
 docker rm asw-consul 
+
+#termino i container dei database 
+docker stop db-recensioni
+docker rm db-recensioni
+docker stop db-connessioni
+docker rm db-connessioni

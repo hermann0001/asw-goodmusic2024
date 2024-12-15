@@ -1,6 +1,7 @@
 # application.yml
 --- 
 spring: 
+
   application: 
     name: recensioni
   cloud:
@@ -18,6 +19,20 @@ spring:
         queryPassing: true 
     loadbalancer: 
       ribbon.enabled: false 
+
+  #database postgres
+  datasource:
+    url: jdbc:postgresql://localhost:5432/recensioni_db?user=recensioni_user&password=recensioni_pass
+    username: recensioni_user
+    password: recensioni_pass
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true  # Abilitato per vedere nel log le query SQL eseguite durante il runtime
+    properties:
+      hibernate:
+      format_sql: true #Formattazione leggibile nel log
 
 server: 
   port: ${PORT:${SERVER_PORT:0}}
