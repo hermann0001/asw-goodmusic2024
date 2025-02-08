@@ -29,7 +29,7 @@ public class RecensioniSeguiteServiceRestBasedImpl implements RecensioniSeguiteS
 				.stream()
 				.filter(c -> c.getRuolo().equals("ARTISTA"))
 				.map(c -> c.getSeguito())
-				.collect(Collectors.toSet()); 
+				.collect(Collectors.toSet()); recensioniSeguiteConsumerService
 		if (artistiSeguiti.size()>0) {
 			Collection<RecensioneBreve> recensioniDiArtisti = recensioniClient.getRecensioniByArtisti(artistiSeguiti);
 			recensioniSeguite.addAll(recensioniDiArtisti); 
