@@ -18,9 +18,24 @@ spring:
         queryPassing: true 
     loadbalancer: 
       ribbon.enabled: false 
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: ${asw.kafka.groupid}
+      auto-offset-reset: latest  # Puoi cambiarlo in earliest se necessario
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"  # Permette la deserializzazione degli eventi
 
 server: 
   port: ${PORT:${SERVER_PORT:0}}
+
+asw:
+  kafka:
+    channel:
+      in: asw-alpha
+    groupid: simple-consumer
 #  port: 8080
   # per swagger, se dietro a un api gateway 
   forward-headers-strategy: framework

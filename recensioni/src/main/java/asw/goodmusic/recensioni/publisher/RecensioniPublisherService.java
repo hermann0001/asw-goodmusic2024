@@ -11,7 +11,7 @@ public class RecensioniPublisherService {
     private RecensioniMessagePublisherPort recensioniMessagePublisher;
 
     public void publish(Recensione r) {
-        String message = r.toString();
+        String message = (r.getGenere()+" "+r.getArtista()+" "+r.getAlbum()+" "+r.getRecensore()+"  "+r.getSunto());
         recensioniMessagePublisher.publish(message);
     }
 
