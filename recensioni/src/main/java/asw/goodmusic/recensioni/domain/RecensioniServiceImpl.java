@@ -1,5 +1,6 @@
 package asw.goodmusic.recensioni.domain;
 
+import asw.goodmusic.recensioni.publisher.RecensioniPublisherService;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,10 +12,16 @@ public class RecensioniServiceImpl implements RecensioniService {
 	@Autowired
 	private RecensioniRepository recensioniRepository;
 
+	@Autowired
+	private RecensioniPublisherService recensioniPublisherService;
+
+
 	/* Crea una nuova recensione, a partire dai suoi dati. */ 
  	public Recensione createRecensione(String recensore, String album, String artista, String genere, String testo, String sunto) {
 		Recensione recensione = new Recensione(recensore, album, artista, genere, testo, sunto); 
 		recensione = recensioniRepository.save(recensione);
+		recensioniPublisherService.publish(recensione);
+
 		return recensione;
 	}
 
