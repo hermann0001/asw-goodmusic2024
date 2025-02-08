@@ -1,6 +1,9 @@
 package asw.goodmusic.connessioni.domain;
 
 import org.springframework.stereotype.Service;
+
+import asw.goodmusic.connessioni.service.KafkaService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*; 
@@ -11,11 +14,24 @@ public class ConnessioniServiceImpl implements ConnessioniService {
 	@Autowired
 	private ConnessioniRepository connessioniRepository;
 
+	@Autowired
+	private KafkaService kafkaService;
+
+	private static final String TOPIC = "connessioni-topic";
+
 	/* Crea una nuova connessione, dati utente, seguito e ruolo. */ 
  	public Connessione createConnessione(String utente, String seguito, String ruolo) {
 		Connessione connessione = new Connessione(utente, seguito, ruolo); 
 		try {
 			connessione = connessioniRepository.save(connessione);
+
+			//Invio evento Kafka
+            String evento = String.format(
+                "{\"type\":\"ConnessioneCreatedEvent\", \"utente\":\"%s\", \"seguito\":\"%s\", \"ruolo\":\"%s\"}",
+                utente, seguito, ruolo
+            );
+            kafkaService.sendMessage(TOPIC, evento);
+
 			return connessione;
 		} catch(Exception e) {
 			/* si potrebbe verificare un'eccezione se è violato il vincolo di unicità della connessione */ 
@@ -64,6 +80,13 @@ public class ConnessioniServiceImpl implements ConnessioniService {
 		Connessione connessione = getConnessione(utente, seguito, ruolo); 
 		if (connessione!=null) {
 			connessioniRepository.delete(connessione);
+
+			String evento = String.format(
+                "{\"type\":\"ConnessioneDeletedEvent\", \"utente\":\"%s\", \"seguito\":\"%s\", \"ruolo\":\"%s\"}",
+                utente, seguito, ruolo
+            );
+            kafkaService.sendMessage(TOPIC, evento);
+			
 		}
 		return connessione; 
 	}
