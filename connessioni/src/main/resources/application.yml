@@ -6,7 +6,7 @@ spring:
     name: connessioni
   cloud:
     consul:
-      host: localhost
+      host: asw-consul
       port: 8500
       discovery: 
         instanceId: ${spring.application.name}-${spring.cloud.client.hostname}-${random.value}
@@ -22,7 +22,7 @@ spring:
 
   #database postgres
   datasource:
-    url: jdbc:postgresql://localhost:5433/connessioni_db?user=connessioni_user&password=connessioni_pass
+    url: jdbc:postgresql://db-connessioni:5432/connessioni_db?user=connessioni_user&password=connessioni_pass
     username: connessioni_user
     password: connessioni_pass
     driver-class-name: org.postgresql.Driver
@@ -35,7 +35,7 @@ spring:
       format_sql: true #Formattazione leggibile nel log
 
 server: 
-  port: ${PORT:${SERVER_PORT:0}}
+  port: 8080
 #  port: 8080
   # per swagger, se dietro a un api gateway 
   forward-headers-strategy: framework
