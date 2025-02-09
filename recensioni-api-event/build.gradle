@@ -1,0 +1,17 @@
+configurations {
+  compileOnly {
+    extendsFrom annotationProcessor
+  }
+}
+
+dependencies {
+  implementation project(':common-api-event')
+
+  // serve il numero di versione perché non è un progetto Spring Boot 
+  compileOnly "org.projectlombok:lombok:${lombokVersion}"
+  annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+}
+
+jar {
+  enabled = true
+}
