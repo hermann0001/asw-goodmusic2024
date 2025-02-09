@@ -21,21 +21,30 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
-      group-id: ${asw.kafka.groupid}
-      auto-offset-reset: latest  # Puoi cambiarlo in earliest se necessario
+      group-id: recensioni-seguite-group
+      auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.json.trusted.packages: "*"  # Permette la deserializzazione degli eventi
+        spring.json.trusted.packages: "*"
+
+  datasource:
+    url: jdbc:postgresql://localhost:5434/recensioni-seguite_db
+    username: user
+    password: pass
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+      format_sql: true #Formattazione leggibile nel log
+
 
 server: 
   port: ${PORT:${SERVER_PORT:0}}
-
-asw:
-  kafka:
-    channel:
-      in: asw-alpha
-    groupid: simple-consumer
 #  port: 8080
   # per swagger, se dietro a un api gateway 
   forward-headers-strategy: framework

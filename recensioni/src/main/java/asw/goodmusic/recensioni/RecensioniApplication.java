@@ -8,7 +8,5 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @EnableDiscoveryClient 
 public class RecensioniApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(RecensioniApplication.class, args);
-	}
+	public static void main(String[] args) {SpringApplication.run(RecensioniApplication.class, args);}
 }

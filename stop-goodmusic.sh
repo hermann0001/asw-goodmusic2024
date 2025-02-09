@@ -17,3 +17,5 @@ docker stop db-recensioni
 docker rm db-recensioni
 docker stop db-connessioni
 docker rm db-connessioni
+docker stop db-recensioni-seguite
+docker rm db-recensioni-seguite

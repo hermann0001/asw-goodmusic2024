@@ -19,7 +19,11 @@ spring:
         queryPassing: true 
     loadbalancer: 
       ribbon.enabled: false 
-
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   #database postgres
   datasource:
     url: jdbc:postgresql://localhost:5433/connessioni_db?user=connessioni_user&password=connessioni_pass

@@ -2,7 +2,10 @@
 
 # Script per avviare l'applicazione GoodMusic con due database PostgreSQL
 
-echo Running GOODMUSIC 
+echo Running GOODMUSIC
+
+# build
+./gradlew clean build
 
 # Avvia il container per Consul
 docker run -d --hostname localhost --name asw-consul --publish 8500:8500 docker.io/hashicorp/consul
@@ -15,8 +18,6 @@ docker run -d --name db-recensioni --hostname db-recensioni \
   -e POSTGRES_DB=recensioni_db \
   -p 5432:5432 postgres:latest   #La porta 5432 dell'host inoltra richiesta di servizio alla porta 5432 del container 
  
-
-
 docker run -d --name db-connessioni --hostname db-connessioni \
   --mount type=volume,src=connessioni-db-data,dst=/var/lib/postgresql/data \
   -e POSTGRES_USER=connessioni_user \
@@ -24,9 +25,16 @@ docker run -d --name db-connessioni --hostname db-connessioni \
   -e POSTGRES_DB=connessioni_db \
   -p 5433:5432 postgres:latest   #La porta 5433 dell'host inoltra richiesta di servizio alla porta 5432 del container
 
+docker run -d --name db-recensioni-seguite --hostname db-recensioni-seguite \
+  --mount type=volume,src=recensioni-seguite-db-data,dst=/var/lib/postgresql/data \
+  -e POSTGRES_USER=user \
+  -e POSTGRES_PASSWORD=pass \
+  -e POSTGRES_DB=recensioni-seguite_db \
+  -p 5434:5432 postgres:latest   #La porta 5434 dell'host inoltra richiesta di servizio alla porta 5432 del container
+
 
 # Attendi affinché i container siano pronti
-sleep 30
+sleep 15
 
 # Avvia i microservizi Java
 java -Xms64m -Xmx128m -jar recensioni/build/libs/recensioni.jar &
