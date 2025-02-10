@@ -6,7 +6,7 @@ spring:
     name: recensioni
   cloud:
     consul:
-      host: asw-consul
+      host: localhost
       port: 8500
       discovery: 
         instanceId: ${spring.application.name}-${spring.cloud.client.hostname}-${random.value}
@@ -18,7 +18,8 @@ spring:
         # consul deve restituire solo servizi che passano l'health check (default=false) 
         queryPassing: true 
     loadbalancer: 
-      ribbon.enabled: false 
+      ribbon.enabled: false
+
   kafka:
     bootstrap-servers: localhost:9092
     producer:
@@ -27,7 +28,7 @@ spring:
 
   #database postgres
   datasource:
-    url: jdbc:postgresql://db-recensioni:5432/recensioni_db?user=recensioni_user&password=recensioni_pass
+    url: jdbc:postgresql://db-recensioni:5432/recensioni_db
     username: recensioni_user
     password: recensioni_pass
     driver-class-name: org.postgresql.Driver
@@ -37,7 +38,7 @@ spring:
     show-sql: true  # Abilitato per vedere nel log le query SQL eseguite durante il runtime
     properties:
       hibernate:
-      format_sql: true #Formattazione leggibile nel log
+        format_sql: true 
 
 server: 
   port: 8080

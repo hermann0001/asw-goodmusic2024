@@ -3,6 +3,9 @@ version: '3'
 services:
   kafka:
     image: docker.io/bitnami/kafka:3.8
+    container_name: kafka
+    networks:
+      - goodmusic-network
     # lasciamo la porta aperta sull'host per consentire la creazione dei topic
     ports:
       - "9092:9092"

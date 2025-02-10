@@ -34,9 +34,9 @@ public class RecensioniSeguiteServiceRestBasedImpl implements RecensioniSeguiteS
 			connessioni
 				.stream()
 				.filter(c -> c.getRuolo().equals("ARTISTA"))
-				.map(c -> c.getSeguito())
-				.collect(Collectors.toSet()); recensioniSeguiteConsumerService
-		if (artistiSeguiti.size()>0) {
+				.map(Connessione::getSeguito)
+				.collect(Collectors.toSet());
+		if (!artistiSeguiti.isEmpty()) {
 			Collection<RecensioneBreve> recensioniDiArtisti = recensioniClient.getRecensioniByArtisti(artistiSeguiti);
 			recensioniSeguite.addAll(recensioniDiArtisti); 
 		}
@@ -45,27 +45,23 @@ public class RecensioniSeguiteServiceRestBasedImpl implements RecensioniSeguiteS
 			connessioni
 				.stream()
 				.filter(c -> c.getRuolo().equals("RECENSORE"))
-				.map(c -> c.getSeguito())
+				.map(Connessione::getSeguito)
 				.collect(Collectors.toSet()); 
-		if (recensoriSeguiti.size()>0) {
+		if (!recensoriSeguiti.isEmpty()) {
 			Collection<RecensioneBreve> recensioniDiRecensori = recensioniClient.getRecensioniByRecensori(recensoriSeguiti);
 			recensioniSeguite.addAll(recensioniDiRecensori); 
 		}
 
-		/* ok, ma purtroppo chiama il metodo getRecensioniByGeneri che non è definito né implementato */ 
-		Collection<String> generiSeguiti = 
+		Collection<String> generiSeguiti =
 			connessioni
 				.stream()
 				.filter(c -> c.getRuolo().equals("GENERE"))
-				.map(c -> c.getSeguito())
+				.map(Connessione::getSeguito)
 				.collect(Collectors.toSet()); 
-		if (generiSeguiti.size()>0) {
+		if (!generiSeguiti.isEmpty()) {
 			Collection<RecensioneBreve> recensioniDiGeneri = recensioniClient.getRecensioniByGeneri(generiSeguiti);
 			recensioniSeguite.addAll(recensioniDiGeneri); 
 		}
-
 		return recensioniSeguite; 
 	}
-
-
 }

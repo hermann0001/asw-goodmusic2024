@@ -4,4 +4,4 @@
 
 echo Deleting .gradle folders 
 
-rm -rI .gradle 
+rm -rf .gradle 

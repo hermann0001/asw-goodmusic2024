@@ -6,7 +6,7 @@ spring:
     name: connessioni
   cloud:
     consul:
-      host: asw-consul
+      host: localhost
       port: 8500
       discovery: 
         instanceId: ${spring.application.name}-${spring.cloud.client.hostname}-${random.value}
@@ -36,7 +36,7 @@ spring:
     show-sql: true  # Abilitato per vedere nel log le query SQL eseguite durante il runtime
     properties:
       hibernate:
-      format_sql: true #Formattazione leggibile nel log
+        format_sql: true #Formattazione leggibile nel log
 
 server: 
   port: 8080

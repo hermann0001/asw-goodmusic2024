@@ -1,0 +1,124 @@
+networks:
+  goodmusic-network:
+    driver: bridge
+
+# volumes:
+#   recensioni-db-data:
+#   connessioni-db-data:
+#   recensioni-seguite-db-data:
+#   kafka_data:
+
+services:
+  # Service discovery
+  consul:
+    image: hashicorp/consul
+    container_name: asw-consul
+    hostname: localhost
+    networks:
+      - goodmusic-network
+    ports:
+      - "8500:8500"
+    command: "agent -dev -client=0.0.0.0"
+
+  # PostgreSQL Databases
+  db-recensioni:
+    image: postgres:latest
+    container_name: db-recensioni
+    networks:
+      - goodmusic-network       # maybe put in a separate network specific for recensioni
+    # volumes:
+    #   - db-recensioni-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: recensioni_user
+      POSTGRES_PASSWORD: recensioni_pass
+      POSTGRES_DB: recensioni_db
+    ports:
+      - "5432:5432"
+
+  db-connessioni:
+    image: postgres:latest
+    container_name: db-connessioni
+    networks:
+      - goodmusic-network
+    # volumes:
+    #   - db-connessioni-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: connessioni_user
+      POSTGRES_PASSWORD: connessioni_pass
+      POSTGRES_DB: connessioni_db
+    ports:
+      - "5433:5432"
+
+  db-recensioni-seguite:
+    image: postgres:latest
+    container_name: db-recensioni-seguite
+    networks:
+      - goodmusic-network
+    # volumes:
+    #   - db-recensioni-seguite-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: recensioni-seguite_user
+      POSTGRES_PASSWORD: recensioni-seguite_pass
+      POSTGRES_DB: recensioni-seguite_db
+    ports:
+      - "5434:5432"
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    networks:
+      - goodmusic-network
+    ports:
+      - "8080:8080"
+    depends_on:
+      - consul
+      - recensioni
+      - connessioni
+      - recensioni-seguite
+
+  connessioni:
+    build: ./connessioni
+    container_name: connessioni
+    networks:
+      - goodmusic-network
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db-recensioni
+      - consul
+      - kafka
+
+  recensioni:
+    build: ./recensioni
+    container_name: recensioni
+    networks:
+      - goodmusic-network
+    ports:
+      - "8082:8080"
+    depends_on:
+      - db-recensioni
+      - consul
+      - kafka
+
+  recensioni-seguite:
+    build: ./recensioni-seguite
+    container_name: recensioni-seguite
+    networks:
+      - goodmusic-network
+    ports:
+      - "8083:8080"
+    depends_on:
+      - db-recensioni-seguite
+      - consul
+      - kafka
+    environment:
+      KAFKA_BROKER: kafka:9092 #check this
+
+  kafka:
+    extends:
+      file: ./kafka/docker-compose.yml
+      service: kafka
+
+
+
+

@@ -5,7 +5,7 @@ spring:
     name: recensioni-seguite
   cloud:
     consul:
-      host: asw-consul
+      host: localhost
       port: 8500
       discovery: 
         instanceId: ${spring.application.name}-${spring.cloud.client.hostname}-${random.value}
@@ -30,8 +30,8 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5434/recensioni-seguite_db
-    username: user
-    password: pass
+    username: recensioni-seguite_user
+    password: recensioni-seguite_pass
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -40,7 +40,7 @@ spring:
     show-sql: true
     properties:
       hibernate:
-      format_sql: true #Formattazione leggibile nel log
+        format_sql: true 
 
 
 server: 
