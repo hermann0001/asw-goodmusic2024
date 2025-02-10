@@ -18,4 +18,4 @@ for service in recensioni connessioni recensioni-seguite; do
   done
 done
 echo "All services are running. Opening shells..."
-echo -e "recensioni\nconnessioni\nrecensioni-seguite" | xargs -d '\n' -I {} setsid x-terminal-emulator -e "docker exec -it {} bash"
+# echo -e "recensioni\nconnessioni\nrecensioni-seguite" | xargs -d '\n' -I {} setsid x-terminal-emulator -e "docker exec -it {} bash"

@@ -1,4 +1,4 @@
-# application.yml
+# connessioni
 --- 
 spring: 
   
@@ -6,7 +6,7 @@ spring:
     name: connessioni
   cloud:
     consul:
-      host: localhost
+      host: asw-consul
       port: 8500
       discovery: 
         instanceId: ${spring.application.name}-${spring.cloud.client.hostname}-${random.value}
@@ -20,13 +20,13 @@ spring:
     loadbalancer: 
       ribbon.enabled: false 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: kafka:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   #database postgres
   datasource:
-    url: jdbc:postgresql://db-connessioni:5432/connessioni_db?user=connessioni_user&password=connessioni_pass
+    url: jdbc:postgresql://db-connessioni:5432/connessioni_db
     username: connessioni_user
     password: connessioni_pass
     driver-class-name: org.postgresql.Driver

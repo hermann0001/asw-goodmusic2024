@@ -1,21 +1,15 @@
 #!/bin/bash
 
-echo Halting GOODMUSIC
+echo "Stopping GOODMUSIC..."
 
-pkill -f 'recensioni-seguite.jar'
-pkill -f 'recensioni.jar'
-pkill -f 'connessioni.jar'
-pkill -f 'api-gateway.jar'
+# Stop and remove only the application's containers
+docker compose down
 
-sleep 4
-
-docker stop asw-consul
-docker rm asw-consul
-
-#termino i container dei database
-docker stop db-recensioni
-docker rm db-recensioni
-docker stop db-connessioni
-docker rm db-connessioni
-docker stop db-recensioni-seguite
-docker rm db-recensioni-seguite
+# Remove dangling containers related to the application
+dangling_containers=$(docker ps -a -q --filter "status=exited")
+if [ -n "$dangling_containers" ]; then
+  echo "Removing dangling containers..."
+  docker rm $dangling_containers
+else
+  echo "No dangling containers to remove."
+fi

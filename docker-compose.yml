@@ -1,12 +1,14 @@
+# docker-compose.yml
 networks:
   goodmusic-network:
     driver: bridge
+    name: goodmusic-network
 
-# volumes:
+volumes:
 #   recensioni-db-data:
 #   connessioni-db-data:
 #   recensioni-seguite-db-data:
-#   kafka_data:
+    kafka_data:
 
 services:
   # Service discovery
@@ -86,7 +88,6 @@ services:
     depends_on:
       - db-recensioni
       - consul
-      - kafka
 
   recensioni:
     build: ./recensioni
@@ -98,7 +99,6 @@ services:
     depends_on:
       - db-recensioni
       - consul
-      - kafka
 
   recensioni-seguite:
     build: ./recensioni-seguite
@@ -110,14 +110,11 @@ services:
     depends_on:
       - db-recensioni-seguite
       - consul
-      - kafka
-    environment:
-      KAFKA_BROKER: kafka:9092 #check this
 
-  kafka:
-    extends:
-      file: ./kafka/docker-compose.yml
-      service: kafka
+  # kafka:
+  #   extends:
+  #     file: ./kafka/docker-compose.yml
+  #     service: kafka
 
 
 

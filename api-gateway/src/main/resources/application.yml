@@ -1,11 +1,11 @@
-# application.yml 
+# api-gateway 
 --- 
 spring: 
   application: 
     name: apigateway
   cloud:
     consul:
-      host: localhost
+      host: asw-consul
       port: 8500
       discovery: 
         instanceId: ${spring.application.name}-${spring.cloud.client.hostname}-${random.value}

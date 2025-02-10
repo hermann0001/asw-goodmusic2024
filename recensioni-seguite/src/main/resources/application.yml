@@ -1,11 +1,11 @@
-# application.yml 
+# recensioni-seguite 
 --- 
 spring: 
   application: 
     name: recensioni-seguite
   cloud:
     consul:
-      host: localhost
+      host: asw-consul
       port: 8500
       discovery: 
         instanceId: ${spring.application.name}-${spring.cloud.client.hostname}-${random.value}
@@ -19,7 +19,7 @@ spring:
     loadbalancer: 
       ribbon.enabled: false 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: kafka:9092
     consumer:
       group-id: recensioni-seguite-group
       auto-offset-reset: earliest
@@ -29,7 +29,7 @@ spring:
         spring.json.trusted.packages: "*"
 
   datasource:
-    url: jdbc:postgresql://localhost:5434/recensioni-seguite_db
+    url: jdbc:postgresql://db-recensioni-seguite:5434/recensioni-seguite_db
     username: recensioni-seguite_user
     password: recensioni-seguite_pass
     driver-class-name: org.postgresql.Driver

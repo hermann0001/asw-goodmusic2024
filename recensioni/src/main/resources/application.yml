@@ -1,4 +1,4 @@
-# application.yml
+# recensioni
 --- 
 spring: 
 
@@ -6,7 +6,7 @@ spring:
     name: recensioni
   cloud:
     consul:
-      host: localhost
+      host: asw-consul
       port: 8500
       discovery: 
         instanceId: ${spring.application.name}-${spring.cloud.client.hostname}-${random.value}
@@ -21,7 +21,7 @@ spring:
       ribbon.enabled: false
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: kafka:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -50,8 +50,3 @@ server:
 #spring.jpa.show-sql: true
 # disable OSIV
 spring.jpa.open-in-view: false
-logging:
-  level:
-    root: INFO
-    org.springframework.kafka: DEBUG
-    asw.goodmusic.recensioni: DEBUG
