@@ -1,11 +1,8 @@
 package asw.goodmusic.connessioni.domain;
 
 import org.springframework.stereotype.Service;
-
-import asw.goodmusic.connessioni.service.KafkaService;
-
+import asw.goodmusic.connessioni.api.event.ConnessioneCreatedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.*; 
 
 @Service
@@ -15,28 +12,20 @@ public class ConnessioniServiceImpl implements ConnessioniService {
 	private ConnessioniRepository connessioniRepository;
 
 	@Autowired
-	private KafkaService kafkaService;
-
-	private static final String TOPIC = "connessioni-topic";
+	private ConnessioniEventPublisher connessioniEventPublisher;
 
 	/* Crea una nuova connessione, dati utente, seguito e ruolo. */ 
  	public Connessione createConnessione(String utente, String seguito, String ruolo) {
 		Connessione connessione = new Connessione(utente, seguito, ruolo); 
-		try {
-			connessione = connessioniRepository.save(connessione);
+		connessione = connessioniRepository.save(connessione);
+		connessioniEventPublisher.publish(new ConnessioneCreatedEvent(
+			connessione.getId(),
+			connessione.getUtente(),
+			connessione.getSeguito(),
+			connessione.getRuolo()
+		));
 
-			//Invio evento Kafka
-            String evento = String.format(
-                "{\"type\":\"ConnessioneCreatedEvent\", \"utente\":\"%s\", \"seguito\":\"%s\", \"ruolo\":\"%s\"}",
-                utente, seguito, ruolo
-            );
-            kafkaService.sendMessage(TOPIC, evento);
-
-			return connessione;
-		} catch(Exception e) {
-			/* si potrebbe verificare un'eccezione se è violato il vincolo di unicità della connessione */ 
-			return null; 
-		}
+		return connessione;
 	}
 
 	/* Trova una connessione, dato l'id. */ 
@@ -80,13 +69,6 @@ public class ConnessioniServiceImpl implements ConnessioniService {
 		Connessione connessione = getConnessione(utente, seguito, ruolo); 
 		if (connessione!=null) {
 			connessioniRepository.delete(connessione);
-
-			String evento = String.format(
-                "{\"type\":\"ConnessioneDeletedEvent\", \"utente\":\"%s\", \"seguito\":\"%s\", \"ruolo\":\"%s\"}",
-                utente, seguito, ruolo
-            );
-            kafkaService.sendMessage(TOPIC, evento);
-			
 		}
 		return connessione; 
 	}

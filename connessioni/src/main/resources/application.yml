@@ -1,7 +1,11 @@
 # connessioni
 --- 
 spring: 
-  
+  kafka:
+    bootstrap-servers: kafka:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   application: 
     name: connessioni
   cloud:
@@ -19,11 +23,6 @@ spring:
         queryPassing: true 
     loadbalancer: 
       ribbon.enabled: false 
-  kafka:
-    bootstrap-servers: kafka:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   #database postgres
   datasource:
     url: jdbc:postgresql://db-connessioni:5432/connessioni_db
@@ -48,3 +47,8 @@ server:
 #spring.jpa.show-sql: true
 # disable OSIV
 spring.jpa.open-in-view: false
+
+asw:
+  kafka:
+    channel:
+      out: connessioni
