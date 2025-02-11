@@ -1,7 +1,12 @@
 # recensioni
 --- 
 spring: 
-
+  kafka:
+    bootstrap-servers: kafka:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      client-id: ${spring.cloud.consul.discovery.instanceId}
   application: 
     name: recensioni
   cloud:
@@ -19,18 +24,11 @@ spring:
         queryPassing: true 
     loadbalancer: 
       ribbon.enabled: false
-
-  kafka:
-    bootstrap-servers: kafka:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-
   #database postgres
   datasource:
     url: jdbc:postgresql://db-recensioni:5432/recensioni_db
-    username: recensioni_user
-    password: recensioni_pass
+    username: postgres
+    password: postgres
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -38,7 +36,7 @@ spring:
     show-sql: true  # Abilitato per vedere nel log le query SQL eseguite durante il runtime
     properties:
       hibernate:
-        format_sql: true 
+        dialect: org.hibernate.dialect.PostgreSQLDialect 
 
 server: 
   port: 8080
@@ -51,11 +49,7 @@ server:
 # disable OSIV
 spring.jpa.open-in-view: false
 
-logging:
-  level:
-    root: INFO
-    "[org.springframework]": "DEBUG"
-    "[org.springframework.kafka]": "TRACE"
-    "[org.apache.kafka]": "TRACE"
-    "[org.springframework.boot]": "DEBUG"
-    "[org.springframework.beans.factory]": "DEBUG"
+asw:
+  kafka:
+    channel:
+      out: recensioni

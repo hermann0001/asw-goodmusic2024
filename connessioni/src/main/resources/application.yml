@@ -27,8 +27,8 @@ spring:
   #database postgres
   datasource:
     url: jdbc:postgresql://db-connessioni:5432/connessioni_db
-    username: connessioni_user
-    password: connessioni_pass
+    username: postgres
+    password: postgres
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -36,7 +36,7 @@ spring:
     show-sql: true  # Abilitato per vedere nel log le query SQL eseguite durante il runtime
     properties:
       hibernate:
-        format_sql: true #Formattazione leggibile nel log
+        dialect: org.hibernate.dialect.PostgreSQLDialect 
 
 server: 
   port: 8080
