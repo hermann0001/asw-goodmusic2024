@@ -2,10 +2,20 @@
 
 echo "Stopping GOODMUSIC..."
 
-# Stop and remove only the application's containers
 docker compose down
 
-# Remove dangling containers related to the application
+echo "Closing all opened terminal windows..."
+
+# Find all gnome-terminal windows opened by this script and close them
+
+services=("recensioni" "connessioni" "recensioni-seguite")
+
+for service in "${services[@]}"; do
+  wmctrl -l | grep "$service" | awk '{print $1}' | xargs -I {} wmctrl -ic {}
+done  
+
+# Alternative method (ensure no terminal remains open)
+pkill --oldest gnome-terminal
 dangling_containers=$(docker ps -a -q --filter "status=exited")
 if [ -n "$dangling_containers" ]; then
   echo "Removing dangling containers..."

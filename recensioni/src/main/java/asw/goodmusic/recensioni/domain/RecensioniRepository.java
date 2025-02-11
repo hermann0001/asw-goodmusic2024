@@ -1,6 +1,7 @@
 package asw.goodmusic.recensioni.domain;
 
 import org.springframework.data.repository.CrudRepository;
+
 import java.util.*; 
 
 public interface RecensioniRepository extends CrudRepository<Recensione, Long> {
