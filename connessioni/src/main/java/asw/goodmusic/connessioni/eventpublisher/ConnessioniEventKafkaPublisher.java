@@ -2,6 +2,7 @@ package asw.goodmusic.connessioni.eventpublisher;
 
 import java.util.logging.Logger;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ public class ConnessioniEventKafkaPublisher implements ConnessioniEventPublisher
     @Value("${asw.kafka.channel.out}")
     private String channel;
 
+    @Autowired
     private KafkaTemplate<String, DomainEvent> template;
 
     @Override
