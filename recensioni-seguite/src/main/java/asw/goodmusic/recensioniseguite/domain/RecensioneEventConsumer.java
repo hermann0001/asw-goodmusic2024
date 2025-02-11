@@ -2,6 +2,7 @@ package asw.goodmusic.recensioniseguite.domain;
 
 import asw.goodmusic.common.api.event.DomainEvent;
 import asw.goodmusic.recensioni.api.event.RecensioneCreatedEvent;
+
 import org.springframework.stereotype.Service;
 
 import java.util.logging.Logger;

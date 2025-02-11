@@ -1,9 +1,8 @@
 rootProject.name = 'asw-goodmusic'
 include('recensioni')
-include('recensioni-api-rest')
-include('recensioni-api-event')
+include('recensioni-api')
 include('connessioni')
 include('connessioni-api')
 include('recensioni-seguite')
 include('api-gateway')
-include('common-api-event')
+include('common-api')

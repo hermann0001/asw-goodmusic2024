@@ -17,9 +17,8 @@ configurations {
 
 dependencies {
   implementation project(':connessioni-api')
-  implementation project(':recensioni-api-rest')
-  implementation project(":common-api-event")
-  implementation project(":recensioni-api-event")
+  implementation project(':recensioni-api')
+  implementation project(":common-api")
 
 
   implementation 'org.springframework.boot:spring-boot-starter-web'

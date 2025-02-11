@@ -1,7 +1,6 @@
 package asw.goodmusic.recensioniseguite.listener;
 
 import asw.goodmusic.common.api.event.DomainEvent;
-import asw.goodmusic.recensioni.api.event.RecensioniEventChannel;
 import asw.goodmusic.recensioniseguite.domain.RecensioneEventConsumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ public class RecensioneEventKafkaListener {
     @Autowired
     private RecensioneEventConsumer recensioneEventConsumer;
 
-    @KafkaListener(topics = RecensioniEventChannel.CHANNEL_NAME)
+    @KafkaListener(topics = "${asw.kafka.channels.in.recensioni}")
     public void listen(ConsumerRecord<String, DomainEvent> record) throws Exception {
         logger.info("RecensioneEventKafkaListener: " + record.toString());
         DomainEvent event = record.value();
