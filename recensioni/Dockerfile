@@ -1,5 +1,7 @@
-FROM openjdk:21-bookworm
+FROM openjdk:21-jdk-slim
 
-ADD build/libs/recensioni.jar /recensioni.jar
+WORKDIR /app
 
-ENTRYPOINT ["java", "-Xms64m", "-Xmx128m", "-jar", "/recensioni.jar"]
+ADD build/libs/recensioni.jar app.jar
+
+ENTRYPOINT ["java", "-Xms64m", "-Xmx128m", "-jar", "app.jar"]
