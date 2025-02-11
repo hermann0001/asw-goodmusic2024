@@ -29,3 +29,8 @@ services:
 volumes:
   kafka_data:
     driver: local
+
+# remove this when using only one compose file to start the app
+networks:
+  goodmusic-network:
+    external: true

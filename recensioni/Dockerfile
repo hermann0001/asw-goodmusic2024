@@ -11,4 +11,4 @@ COPY build/libs/recensioni.jar app.jar
 EXPOSE 8080
 
 # Esegui il servizio Java quando il container parte
-CMD ["java", "-Xms64m", "-Xmx128m", "-jar", "app.jar"]
+CMD ["java", "-Xms64m", "-Xmx128m", "-jar", "app.jar", "--debug"]

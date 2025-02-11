@@ -50,3 +50,12 @@ server:
 #spring.jpa.show-sql: true
 # disable OSIV
 spring.jpa.open-in-view: false
+
+logging:
+  level:
+    root: INFO
+    "[org.springframework]": "DEBUG"
+    "[org.springframework.kafka]": "TRACE"
+    "[org.apache.kafka]": "TRACE"
+    "[org.springframework.boot]": "DEBUG"
+    "[org.springframework.beans.factory]": "DEBUG"

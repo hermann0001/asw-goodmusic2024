@@ -3,6 +3,7 @@ networks:
   goodmusic-network:
     driver: bridge
     name: goodmusic-network
+    external: true
 
 volumes:
 #   recensioni-db-data:
@@ -36,6 +37,12 @@ services:
       POSTGRES_DB: recensioni_db
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U recensioni_user -d recensioni_db"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
 
   db-connessioni:
     image: postgres:latest
@@ -50,6 +57,12 @@ services:
       POSTGRES_DB: connessioni_db
     ports:
       - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U connessioni_user -d connessioni_db"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
 
   db-recensioni-seguite:
     image: postgres:latest
@@ -64,7 +77,14 @@ services:
       POSTGRES_DB: recensioni-seguite_db
     ports:
       - "5434:5432"
-
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U recensioni-seguite_user -d recensioni-seguite_db"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+  
+  # Services
   api-gateway:
     build: ./api-gateway
     container_name: api-gateway
@@ -86,8 +106,10 @@ services:
     ports:
       - "8081:8080"
     depends_on:
-      - db-recensioni
-      - consul
+      db-connessioni:
+        condition: service_healthy
+      consul:
+        condition: service_started
 
   recensioni:
     build: ./recensioni
@@ -97,8 +119,10 @@ services:
     ports:
       - "8082:8080"
     depends_on:
-      - db-recensioni
-      - consul
+      db-recensioni:
+        condition: service_healthy
+      consul:
+        condition: service_started
 
   recensioni-seguite:
     build: ./recensioni-seguite
@@ -108,8 +132,10 @@ services:
     ports:
       - "8083:8080"
     depends_on:
-      - db-recensioni-seguite
-      - consul
+      db-recensioni-seguite:
+        condition: service_healthy
+      consul:
+        condition: service_started
 
   # kafka:
   #   extends:
