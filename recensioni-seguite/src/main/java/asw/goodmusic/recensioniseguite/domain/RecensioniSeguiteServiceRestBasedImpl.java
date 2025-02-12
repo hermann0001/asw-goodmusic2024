@@ -7,8 +7,7 @@ import org.springframework.context.annotation.Primary;
 import java.util.*; 
 import java.util.stream.*; 
 
-@Service 
-@Primary 
+@Service  
 public class RecensioniSeguiteServiceRestBasedImpl implements RecensioniSeguiteService {
 
 	@Autowired 

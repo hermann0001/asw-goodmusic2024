@@ -7,7 +7,6 @@ import java.util.*;
 @Service 
 public interface RecensioniSeguiteService {
 
-	public void createRecensioneBreve(RecensioneBreve recensioneBreve);
 		/* Trova le recensioni seguite da un utente,
 	 * ovvero le recensioni degli album degli artisti, dei recensori e dei generi musicali seguiti da quell'utente. */ 
 	public Collection<RecensioneBreve> getRecensioniSeguite(String utente); 
