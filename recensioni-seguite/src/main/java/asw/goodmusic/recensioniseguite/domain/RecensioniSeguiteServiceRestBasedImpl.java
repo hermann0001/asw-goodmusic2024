@@ -7,7 +7,8 @@ import org.springframework.context.annotation.Primary;
 import java.util.*; 
 import java.util.stream.*; 
 
-@Service  
+// 500+ ms to establish tcp connection and 20-30 ms per query avg
+@Service 
 public class RecensioniSeguiteServiceRestBasedImpl implements RecensioniSeguiteService {
 
 	@Autowired 
