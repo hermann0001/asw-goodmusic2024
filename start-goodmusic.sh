@@ -41,12 +41,25 @@ until docker exec db-recensioni pg_isready -U recensioni_user && docker exec db-
     sleep 5
 done
 
-echo "Avviando i microservizi Java nei container..."
-
-# Avvia i microservizi Java e collegali alla rete Docker
+echo "Avviando il Gateway API..."
 docker run -d --name api-gateway --network goodmusic-network -p 8080:8080 api-gateway
-docker run -d --name connessioni --network goodmusic-network -p 8081:8080 connessioni
-docker run -d --name recensioni --network goodmusic-network -p 8082:8080 recensioni
-docker run -d --name recensioni-seguite --network goodmusic-network -p 8083:8080 recensioni-seguite
+
+echo "Avviando più istanze dei microservizi..."
+
+# Avvia 2 istanze del servizio "connessioni"
+for i in $(seq 1 2); do
+  docker run -d --name connessioni-$i --network goodmusic-network connessioni
+done
+
+# Avvia 2 istanze del servizio "recensioni"
+for i in $(seq 1 2); do
+  docker run -d --name recensioni-$i --network goodmusic-network recensioni
+done
+
+# Avvia 2 istanze del servizio "recensioni-seguite"
+for i in $(seq 1 2); do
+  docker run -d --name recensioni-seguite-$i --network goodmusic-network recensioni-seguite
+done
+
 
 echo "Tutti i servizi sono stati avviati!"
