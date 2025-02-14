@@ -5,10 +5,10 @@ networks:
     name: goodmusic-network
 
 volumes:
-#   recensioni-db-data:
-#   connessioni-db-data:
-#   recensioni-seguite-db-data:
-    kafka_data:
+  recensioni-db-data:
+  connessioni-db-data:
+  recensioni-seguite-db-data:
+  kafka_data:
 
 services:
   # Service discovery
@@ -21,7 +21,7 @@ services:
     ports:
       - "8500:8500"
     command: "agent -dev -client=0.0.0.0"
-  
+
   kafka:
     image: docker.io/bitnami/kafka:3.8
     container_name: kafka
@@ -53,8 +53,8 @@ services:
     container_name: db-recensioni
     networks:
       - goodmusic-network       # maybe put in a separate network specific for recensioni
-    # volumes:
-    #   - db-recensioni-data:/var/lib/postgresql/data
+    volumes:
+       - recensioni-db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -73,8 +73,8 @@ services:
     container_name: db-connessioni
     networks:
       - goodmusic-network
-    # volumes:
-    #   - db-connessioni-data:/var/lib/postgresql/data
+    volumes:
+       - connessioni-db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -93,8 +93,8 @@ services:
     container_name: db-recensioni-seguite
     networks:
       - goodmusic-network
-    # volumes:
-    #   - db-recensioni-seguite-data:/var/lib/postgresql/data
+    volumes:
+        - recensioni-seguite-db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -119,51 +119,84 @@ services:
     depends_on:
       - consul
 
-  connessioni:
+
+  # Connessioni containers (replicati)
+  connessioni-1:
     build: ./connessioni
-    container_name: connessioni
+    container_name: connessioni-1
     networks:
       - goodmusic-network
-    ports:
-      - "8081:8080"
+    environment:
+      - CONSUL_HTTP_ADDR=consul:8500
+    labels:
+      - "traefik.enable=false"  # Disabilitiamo Traefik, per evitare conflitti
     depends_on:
-      db-connessioni:
-        condition: service_healthy
-      consul:
-        condition: service_started
-      kafka:
-        condition: service_started
+      - consul
+    restart: always
 
-  recensioni:
+  connessioni-2:
+    build: ./connessioni
+    container_name: connessioni-2
+    networks:
+      - goodmusic-network
+    environment:
+      - CONSUL_HTTP_ADDR=consul:8500
+    labels:
+      - "traefik.enable=false"  # Disabilitiamo Traefik, per evitare conflitti
+    depends_on:
+      - consul
+    restart: always
+
+  # Recensioni containers (replicati)
+  recensioni-1:
     build: ./recensioni
-    container_name: recensioni
+    container_name: recensioni-1
     networks:
       - goodmusic-network
-    ports:
-      - "8082:8080"
+    environment:
+      - CONSUL_HTTP_ADDR=consul:8500
+    labels:
+      - "traefik.enable=false"
     depends_on:
-      db-recensioni:
-        condition: service_healthy
-      consul:
-        condition: service_started
-      kafka:
-        condition: service_started
+      - consul
+    restart: always
 
-  recensioni-seguite:
+  recensioni-2:
+    build: ./recensioni
+    container_name: recensioni-2
+    networks:
+      - goodmusic-network
+    environment:
+      - CONSUL_HTTP_ADDR=consul:8500
+    labels:
+      - "traefik.enable=false"
+    depends_on:
+      - consul
+    restart: always
+
+  # Recensioni Seguite containers (replicati)
+  recensioni-seguite-1:
     build: ./recensioni-seguite
-    container_name: recensioni-seguite
+    container_name: recensioni-seguite-1
     networks:
       - goodmusic-network
-    ports:
-      - "8083:8080"
+    environment:
+      - CONSUL_HTTP_ADDR=consul:8500
+    labels:
+      - "traefik.enable=false"
     depends_on:
-      db-recensioni-seguite:
-        condition: service_healthy
-      consul:
-        condition: service_started
-      kafka:
-        condition: service_started
+      - consul
+    restart: always
 
-
-
-
+  recensioni-seguite-2:
+    build: ./recensioni-seguite
+    container_name: recensioni-seguite-2
+    networks:
+      - goodmusic-network
+    environment:
+      - CONSUL_HTTP_ADDR=consul:8500
+    labels:
+      - "traefik.enable=false"
+    depends_on:
+      - consul
+    restart: always
