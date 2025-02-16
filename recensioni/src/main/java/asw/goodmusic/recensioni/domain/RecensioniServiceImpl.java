@@ -31,7 +31,6 @@ public class RecensioniServiceImpl implements RecensioniService {
 			recensione.getGenere(), 
 			recensione.getSunto()
 		);
-		logger.info("Recensione creato!");
 		recensioniEventPublisher.publish(event);
 		return recensione;
 	}

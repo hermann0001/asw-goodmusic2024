@@ -27,9 +27,13 @@ public class ConnessioneEventConsumerPortImpl implements ConnessioneEventConsume
     }
 
     private void onConnessioneCreated(ConnessioneCreatedEvent event) {
-        Connessione connessione = new Connessione(event.getId(), event.getUtente(), event.getSeguito(), event.getSeguito());
-        this.connessioniService.createConnessione(connessione);
-        logger.info("CREATED CONNESSIONE: " + connessione.toString());
+        Connessione c = this.connessioniService.createConnessione(
+            event.getId(),
+            event.getUtente(),
+            event.getSeguito(),
+            event.getRuolo()
+        );
+        logger.info("CREATED CONNESSIONE: " + c.toString());
     }
 
     private void onConnessioneDeleted(ConnessioneDeletedEvent event) {

@@ -5,9 +5,9 @@ networks:
     name: goodmusic-network
 
 volumes:
-  recensioni-db-data:
-  connessioni-db-data:
-  recensioni-seguite-db-data:
+#  recensioni-db-data:
+#  connessioni-db-data:
+#  recensioni-seguite-db-data:
   kafka_data:
 
 services:
@@ -53,8 +53,8 @@ services:
     container_name: db-recensioni
     networks:
       - goodmusic-network       # maybe put in a separate network specific for recensioni
-    volumes:
-       - recensioni-db-data:/var/lib/postgresql/data
+    # volumes:
+    #    - recensioni-db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -73,8 +73,8 @@ services:
     container_name: db-connessioni
     networks:
       - goodmusic-network
-    volumes:
-       - connessioni-db-data:/var/lib/postgresql/data
+    # volumes:
+    #    - connessioni-db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -93,8 +93,8 @@ services:
     container_name: db-recensioni-seguite
     networks:
       - goodmusic-network
-    volumes:
-        - recensioni-seguite-db-data:/var/lib/postgresql/data
+    # volumes:
+    #     - recensioni-seguite-db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -119,84 +119,51 @@ services:
     depends_on:
       - consul
 
-
-  # Connessioni containers (replicati)
-  connessioni-1:
+  connessioni:
     build: ./connessioni
-    container_name: connessioni-1
     networks:
       - goodmusic-network
-    environment:
-      - CONSUL_HTTP_ADDR=consul:8500
-    labels:
-      - "traefik.enable=false"  # Disabilitiamo Traefik, per evitare conflitti
     depends_on:
-      - consul
-    restart: always
+      db-connessioni:
+        condition: service_healthy
+      consul:
+        condition: service_started
+      kafka:
+        condition: service_started
+    deploy:
+      mode: replicated
+      replicas: 2
+      endpoint_mode: vip
 
-  connessioni-2:
-    build: ./connessioni
-    container_name: connessioni-2
-    networks:
-      - goodmusic-network
-    environment:
-      - CONSUL_HTTP_ADDR=consul:8500
-    labels:
-      - "traefik.enable=false"  # Disabilitiamo Traefik, per evitare conflitti
-    depends_on:
-      - consul
-    restart: always
-
-  # Recensioni containers (replicati)
-  recensioni-1:
+  recensioni:
     build: ./recensioni
-    container_name: recensioni-1
     networks:
       - goodmusic-network
-    environment:
-      - CONSUL_HTTP_ADDR=consul:8500
-    labels:
-      - "traefik.enable=false"
     depends_on:
-      - consul
-    restart: always
+      db-recensioni:
+        condition: service_healthy
+      consul:
+        condition: service_started
+      kafka:
+        condition: service_started
+    deploy:
+      mode: replicated
+      replicas: 2
+      endpoint_mode: vip
 
-  recensioni-2:
-    build: ./recensioni
-    container_name: recensioni-2
-    networks:
-      - goodmusic-network
-    environment:
-      - CONSUL_HTTP_ADDR=consul:8500
-    labels:
-      - "traefik.enable=false"
-    depends_on:
-      - consul
-    restart: always
-
-  # Recensioni Seguite containers (replicati)
-  recensioni-seguite-1:
+  recensioni-seguite:
     build: ./recensioni-seguite
-    container_name: recensioni-seguite-1
     networks:
       - goodmusic-network
-    environment:
-      - CONSUL_HTTP_ADDR=consul:8500
-    labels:
-      - "traefik.enable=false"
     depends_on:
-      - consul
-    restart: always
+      db-recensioni-seguite:
+        condition: service_healthy
+      consul:
+        condition: service_started
+      kafka:
+        condition: service_started
+    deploy:
+      mode: replicated
+      replicas: 2
+      endpoint_mode: vip
 
-  recensioni-seguite-2:
-    build: ./recensioni-seguite
-    container_name: recensioni-seguite-2
-    networks:
-      - goodmusic-network
-    environment:
-      - CONSUL_HTTP_ADDR=consul:8500
-    labels:
-      - "traefik.enable=false"
-    depends_on:
-      - consul
-    restart: always

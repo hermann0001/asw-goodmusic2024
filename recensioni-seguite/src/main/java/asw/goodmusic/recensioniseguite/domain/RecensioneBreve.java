@@ -11,7 +11,6 @@ public class RecensioneBreve implements Comparable<RecensioneBreve> {
 
 	/* id della recensione */
 	@Id
-	@GeneratedValue
 	@EqualsAndHashCode.Include
 	private Long id; 
 	/* chi ha scritto la recensione */ 

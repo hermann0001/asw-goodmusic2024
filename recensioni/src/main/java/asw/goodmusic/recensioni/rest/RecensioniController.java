@@ -36,7 +36,6 @@ public class RecensioniController {
 		String genere = request.getGenere();
 		String testo = request.getTesto();
 		String sunto = request.getSunto();
-		logger.info("REST CALL: createRecensione " + recensore + ", " + album + ", " + artista + ", " + genere + ", " + testo + ", " + sunto); 
 		Recensione recensione = recensioniService.createRecensione(recensore, album, artista, genere, testo, sunto);
 		RecensioneResponse response = toRecensioneResponse(recensione); 
 		logger.info("REST CALL: createRecensione " + recensore + ", " + album + ", " + artista + ", " + genere + ", " + testo + ", " + sunto 

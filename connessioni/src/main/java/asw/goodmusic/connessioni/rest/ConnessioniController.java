@@ -34,7 +34,6 @@ public class ConnessioniController {
 		String utente = request.getUtente();
 		String seguito = request.getSeguito();
 		String ruolo = request.getRuolo();
-		logger.info("REST CALL: createConnessione " + utente + ", " + seguito + ", " + ruolo); 
 		Connessione connessione = connessioniService.createConnessione(utente, seguito, ruolo);
 		if (connessione!=null) {
 			ConnessioneResponse response = toConnessioneResponse(connessione); 

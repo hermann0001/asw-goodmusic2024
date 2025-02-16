@@ -6,12 +6,11 @@ import lombok.*;
 /* Connessione tra un utente e un seguito (con un ruolo). */
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor
-@Table(uniqueConstraints = { @UniqueConstraint(name = "UniqueUtenteSeguitoRuolo", columnNames = { "utente", "seguito", "ruolo" }) })
 public class Connessione {
 
-	@Id
-	@GeneratedValue
 	/* id della connessione */ 
+	@Id
+	@EqualsAndHashCode.Include
 	private Long id; 
 	/* utente che segue */ 
 	private String utente; 

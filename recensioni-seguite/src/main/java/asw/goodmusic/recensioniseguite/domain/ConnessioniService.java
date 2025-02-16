@@ -9,8 +9,9 @@ public class ConnessioniService {
     @Autowired
     private ConnessioniRepository connessioniRepository;
 
-    public void createConnessione(Connessione c) {
-        this.connessioniRepository.save(c);
+    public Connessione createConnessione(Long id, String utente, String seguito, String ruolo) {
+        Connessione c = new Connessione(id, utente, seguito, ruolo);
+        return this.connessioniRepository.save(c);
     }
 
     public void deleteConnessione(Long id) {
