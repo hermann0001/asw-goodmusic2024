@@ -3,6 +3,15 @@ networks:
   goodmusic-network:
     driver: bridge
     name: goodmusic-network
+  recensioni-network:
+    driver: bridge
+    name: recensioni-network
+  connessioni-network:
+    driver: bridge
+    name: connessioni-network
+  recensioni-seguite-network:
+    driver: bridge
+    name: recensioni-seguite-network 
 
 volumes:
   recensioni-db-data:
@@ -52,7 +61,7 @@ services:
     image: postgres:latest
     container_name: db-recensioni
     networks:
-      - goodmusic-network       # maybe put in a separate network specific for recensioni
+       - recensioni-network
     volumes:
        - recensioni-db-data:/var/lib/postgresql/data
     environment:
@@ -72,7 +81,7 @@ services:
     image: postgres:latest
     container_name: db-connessioni
     networks:
-      - goodmusic-network
+       - connessioni-network
     volumes:
        - connessioni-db-data:/var/lib/postgresql/data
     environment:
@@ -92,9 +101,9 @@ services:
     image: postgres:latest
     container_name: db-recensioni-seguite
     networks:
-      - goodmusic-network
+       - recensioni-seguite-network
     volumes:
-        - recensioni-seguite-db-data:/var/lib/postgresql/data
+       - recensioni-seguite-db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -123,6 +132,7 @@ services:
     build: ./connessioni
     networks:
       - goodmusic-network
+      - connessioni-network
     depends_on:
       db-connessioni:
         condition: service_healthy
@@ -139,6 +149,7 @@ services:
     build: ./recensioni
     networks:
       - goodmusic-network
+      - recensioni-network
     depends_on:
       db-recensioni:
         condition: service_healthy
@@ -155,6 +166,7 @@ services:
     build: ./recensioni-seguite
     networks:
       - goodmusic-network
+      - recensioni-seguite-network
     depends_on:
       db-recensioni-seguite:
         condition: service_healthy

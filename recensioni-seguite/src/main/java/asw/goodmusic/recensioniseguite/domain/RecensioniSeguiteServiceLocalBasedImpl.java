@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+// 94 ms first query than 5 ms
 @Service
 @Primary
 public class RecensioniSeguiteServiceLocalBasedImpl implements RecensioniSeguiteService{
