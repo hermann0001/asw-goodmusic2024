@@ -20,8 +20,10 @@ public class ConnessioneEventConsumerPortImpl implements ConnessioneEventConsume
     @Override
     public void onEvent(DomainEvent event) {
         if (event instanceof ConnessioneCreatedEvent evt) {
+            logger.info("create event");
             this.onConnessioneCreated(evt);
         } else if (event instanceof ConnessioneDeletedEvent evt) {
+            logger.info("delete event");
             this.onConnessioneDeleted(evt);
         }
     }
@@ -38,6 +40,6 @@ public class ConnessioneEventConsumerPortImpl implements ConnessioneEventConsume
 
     private void onConnessioneDeleted(ConnessioneDeletedEvent event) {
         this.connessioniService.deleteConnessione(event.getId());
-        logger.info("CREATED CONNESSIONE: " + event.toString());
+        logger.info("DELETED CONNESSIONE: " + event.toString());
     }
 }

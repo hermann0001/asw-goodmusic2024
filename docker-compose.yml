@@ -5,9 +5,9 @@ networks:
     name: goodmusic-network
 
 volumes:
-#  recensioni-db-data:
-#  connessioni-db-data:
-#  recensioni-seguite-db-data:
+  recensioni-db-data:
+  connessioni-db-data:
+  recensioni-seguite-db-data:
   kafka_data:
 
 services:
@@ -53,8 +53,8 @@ services:
     container_name: db-recensioni
     networks:
       - goodmusic-network       # maybe put in a separate network specific for recensioni
-    # volumes:
-    #    - recensioni-db-data:/var/lib/postgresql/data
+    volumes:
+       - recensioni-db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -73,8 +73,8 @@ services:
     container_name: db-connessioni
     networks:
       - goodmusic-network
-    # volumes:
-    #    - connessioni-db-data:/var/lib/postgresql/data
+    volumes:
+       - connessioni-db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -93,8 +93,8 @@ services:
     container_name: db-recensioni-seguite
     networks:
       - goodmusic-network
-    # volumes:
-    #     - recensioni-seguite-db-data:/var/lib/postgresql/data
+    volumes:
+        - recensioni-seguite-db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
